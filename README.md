@@ -7,6 +7,7 @@ Introduction:
 This is a slightly modified version of Dale Harvey's Pacman code.
 
 Dale Harvey: https://github.com/daleharvey
+
 Dale Harvey's Pacman codde: https://github.com/daleharvey/pacman
 
 I have made some slight modifications to that original code to achieve a singular result: make it easy to play the first few levels and make it super tough to play later levels. Also, the ghosts are less intimidating in the first few levels.
