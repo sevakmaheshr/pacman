@@ -22,6 +22,7 @@ var NONE        = 4,
     Pacman      = {};
 
 Pacman.FPS = 30;
+Pacman.Level = 1;
 
 Pacman.Ghost = function (game, map, colour) {
 
@@ -30,10 +31,13 @@ Pacman.Ghost = function (game, map, colour) {
         eatable   = null,
         eaten     = null,
         due       = null;
+
+    // Mahesh: I am just being evil here: i want to eat each ghost 2 times :) 
+    var eat_count = 2;
     
     function getNewCoord(dir, current) { 
-        
-        var speed  = isVunerable() ? 1 : isHidden() ? 4 : 2,
+        // Mahesh: I want to start things off slow :)
+        var speed  = 0.4 * Pacman.Level, // isVunerable() ? 1 : isHidden() ? 4 : 2,
             xSpeed = (dir === LEFT && -speed || dir === RIGHT && speed || 0),
             ySpeed = (dir === DOWN && speed || dir === UP && -speed || 0);
     
@@ -98,8 +102,14 @@ Pacman.Ghost = function (game, map, colour) {
         eatable = game.getTick();
     };
 
-    function eat() { 
-        eatable = null;
+    function eat() {
+        if (eat_count <= 0) {
+          eatable = null;
+          eat_count = 2; // Mahesh: f*king JS! doesn't have const?
+        }
+        else {
+          eat_count--;
+        }
         eaten = game.getTick();
     };
 
@@ -128,7 +138,8 @@ Pacman.Ghost = function (game, map, colour) {
 
     function getColour() { 
         if (eatable) { 
-            if (secondsAgo(eatable) > 5) { 
+            // Mahesh: I want the ghosts to be eatable for a long time! :D
+            if (secondsAgo(eatable) > 50) { 
                 return game.getTick() % 20 > 10 ? "#FFFFFF" : "#0000BB";
             } else { 
                 return "#0000BB";
@@ -145,11 +156,13 @@ Pacman.Ghost = function (game, map, colour) {
             top  = (position.y/10) * s,
             left = (position.x/10) * s;
     
-        if (eatable && secondsAgo(eatable) > 8) {
+         // Mahesh: I want the ghosts to be eatable for a long time! :D
+        if (eatable && secondsAgo(eatable) > 120) {
             eatable = null;
         }
         
-        if (eaten && secondsAgo(eaten) > 3) { 
+         // Mahesh: I want the ghosts to be eatable for a long time! :D
+        if (eaten && secondsAgo(eaten) > 30) { 
             eaten = null;
         }
         
@@ -293,7 +306,8 @@ Pacman.User = function (game, map) {
 
     function addScore(nScore) { 
         score += nScore;
-        if (score >= 10000 && score - nScore < 10000) { 
+        // Mahesh: we will start with just one life, but, we will get more lives as the score increases
+        if (score >= 1000) { 
             lives += 1;
         }
     };
@@ -312,13 +326,15 @@ Pacman.User = function (game, map) {
 
     function initUser() {
         score = 0;
-        lives = 3;
+        lives = 1; // Mahesh: we will start off with just one life
         newLevel();
     }
     
     function newLevel() {
         resetPosition();
         eaten = 0;
+        // Mahesh: now we have levels
+        Pacman.Level ++;
     };
     
     function resetPosition() {
@@ -777,7 +793,7 @@ var PACMAN = (function () {
         ghosts       = [],
         ghostSpecs   = ["#00FFDE", "#FF0000", "#FFB8DE", "#FFB847"],
         eatenCount   = 0,
-        level        = 0,
+        level        = Pacman.Level,
         tick         = 0,
         ghostPos, userPos, 
         stateChanged = true,
@@ -825,7 +841,8 @@ var PACMAN = (function () {
 
     function startNewGame() {
         setState(WAITING);
-        level = 1;
+        Pacman.Level = 1;
+        // level = 1;
         user.reset();
         map.reset();
         map.draw(ctx);
@@ -872,6 +889,22 @@ var PACMAN = (function () {
                           Math.pow(ghost.y - user.y, 2))) < 10;
     };
 
+    function getScoreValue() {
+        var score = user.theScore(); 
+        if (score < 1000) {
+            return "" + score;
+        }
+        if (score < 1000000) {
+            return "" + (Math.floor(score/1000)) + "K";
+        }
+        if (score < 1000000000) {
+            return "" + (Math.floor(score/1000000)) + "M";
+        }
+        else {
+           // return "" + (Math.floor(score/1000000)) + "M";
+           return "Infinite!"    
+        }
+    }
     function drawFooter() {
         
         var topLeft  = (map.height * map.blockSize),
@@ -882,6 +915,8 @@ var PACMAN = (function () {
         
         ctx.fillStyle = "#FFFF00";
 
+// Mahesh: I don't want to see actual pacman-s, just the number of lives will do, hence commented out this block
+/*
         for (var i = 0, len = user.getLives(); i < len; i++) {
             ctx.fillStyle = "#FFFF00";
             ctx.beginPath();
@@ -893,7 +928,7 @@ var PACMAN = (function () {
                     map.blockSize / 2, Math.PI * 0.25, Math.PI * 1.75, false);
             ctx.fill();
         }
-
+*/
         ctx.fillStyle = !soundDisabled() ? "#00FF00" : "#FF0000";
         ctx.font = "bold 16px sans-serif";
         //ctx.fillText("♪", 10, textBase);
@@ -901,8 +936,12 @@ var PACMAN = (function () {
 
         ctx.fillStyle = "#FFFF00";
         ctx.font      = "14px BDCartoonShoutRegular";
-        ctx.fillText("Score: " + user.theScore(), 30, textBase);
-        ctx.fillText("Level: " + level, 260, textBase);
+        // Mahesh: printing pacman lives here
+        ctx.fillText("Lives: " + user.getLives(), 30, textBase);
+        // Mahesh: detailed score is NOT needed, we will show it in K
+        // TBD: add a function that will return in K (1000s), M(illions) and B(illions)
+        ctx.fillText("Score: " + getScoreValue(), 130, textBase);
+        ctx.fillText("Level: " + Pacman.Level, 260, textBase);
     }
 
     function redrawBlock(pos) {
@@ -938,13 +977,16 @@ var PACMAN = (function () {
                 if (ghosts[i].isVunerable()) { 
                     audio.play("eatghost");
                     ghosts[i].eat();
-                    eatenCount += 1;
-                    nScore = eatenCount * 50;
+                    // Mahesh: we will get a lot of score each time we eat a ghost!
+                    eatenCount += 10;
+                    nScore = eatenCount * 500;
                     drawScore(nScore, ghostPos[i]);
                     user.addScore(nScore);                    
                     setState(EATEN_PAUSE);
                     timerStart = tick;
-                } else if (ghosts[i].isDangerous()) {
+                }
+                // comment out the following block to ensure that ghosts can never kill pacman
+                else if (ghosts[i].isDangerous()) {
                     audio.play("die");
                     setState(DYING);
                     timerStart = tick;
@@ -970,7 +1012,7 @@ var PACMAN = (function () {
             map.draw(ctx);
             dialog("Press N to start a New game");            
         } else if (state === EATEN_PAUSE && 
-                   (tick - timerStart) > (Pacman.FPS / 3)) {
+                   (tick - timerStart) > (10)) { // Mahesh: changed this value to 10 but I don't recollect why. but the change is important
             map.draw(ctx);
             setState(PLAYING);
         } else if (state === DYING) {
@@ -985,8 +1027,8 @@ var PACMAN = (function () {
                 user.drawDead(ctx, (tick - timerStart) / (Pacman.FPS * 2));
             }
         } else if (state === COUNTDOWN) {
-            
-            diff = 5 + Math.floor((timerStart - tick) / Pacman.FPS);
+            // Mahesh: making things last longer, or maybe for a shorter time
+            diff = 1 + Math.floor((timerStart - tick) / Pacman.FPS);
             
             if (diff === 0) {
                 map.draw(ctx);
@@ -1014,7 +1056,7 @@ var PACMAN = (function () {
     
     function completedLevel() {
         setState(WAITING);
-        level += 1;
+        Pacman.Level += 1;
         map.reset();
         user.newLevel();
         startLevel();
@@ -1124,7 +1166,7 @@ Pacman.BLOCK   = 3;
 Pacman.PILL    = 4;
 
 Pacman.MAP = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
 	[0, 4, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 4, 0],
 	[0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0],
