@@ -25,7 +25,7 @@ Just download the zip of this code repo onto your computer. Unzip the zip file y
 A few things to note:
 ----
 
-I am NOT a JS programmer. So, I have used my little knowledge from other programming languages to make the changes.
+I am NOT a JS programmer. So, I have used my little knowledge from other programming languages to make the changes. So, if my JS code (changes) don't quite live up to your modern JS/ES 6-7-8, etc coding standards ... forgive me. At this point in time I have no interest in learning JS. 😜
 
 I am NOT a github user. So, if this doesn't work, don't blame me. Be nice and let me know by raising an issue.
 
