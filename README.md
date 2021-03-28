@@ -29,4 +29,4 @@ I am NOT a JS programmer. So, I have used my little knowledge from other program
 
 I am NOT a github user. So, if this doesn't work, don't blame me. Be nice and let me know by raising an issue.
 
-Hope you enjoy my changes to DH's Pacman code. :D
+Hope you enjoy my changes to DH's Pacman code. 🙂
