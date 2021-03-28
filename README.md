@@ -16,6 +16,8 @@ My changes also give you:
 * a lot of score very quickly
 * a lot of lives very quickly (although you start with just 1 life - but the game is so easy during that life that you will soon accumulate tons of lives for the future)
 
+I have also cleaned up the lives, score and level part of the UI to suit my needs.
+
 Unfortunately, within a short while after starting the game, it gets kinda hard. You will see when you play the game. 
 
 So, how do you play the game?
