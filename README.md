@@ -20,7 +20,7 @@ Unfortunately, within a short while after starting the game, it gets kinda hard.
 
 So, how do you play the game?
 
-Just download the zip of this code repo onto your computer. Unzip the zip file you have downloaded in the previous step. That should create a directory/folder called "pacman-master". Get into that dir/folder and double click the "index.html" file. That should start the game in a new tab in your default browser.
+Just download the zip of this code repo onto your computer. Unzip the zip file you have downloaded in the previous step. That should create a directory/folder called "pacman-master". Get into that dir/folder and double click the "index.html" file. That should start the game in a new tab in your default browser. Get your fingers moving on the arrow keys ... cause the ghosts are coming to get you!
 
 A few things to note:
 ----
