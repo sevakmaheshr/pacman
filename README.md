@@ -16,7 +16,9 @@ My changes also give you:
 * a lot of score very quickly
 * a lot of lives very quickly (although you start with just 1 life - but the game is so easy during that life that you will soon accumulate tons of lives for the future)
 
-Unfortunately, within a short while after staering the game, it gets kinda hard. You will see when you play the game. So, how do you play the game?
+Unfortunately, within a short while after starting the game, it gets kinda hard. You will see when you play the game. 
+
+So, how do you play the game?
 
 Just download the zip of this code repo onto your computer. Unzip the zip file you have downloaded in the previous step. That should create a directory/folder called "pacman-master". Get into that dir/folder and double click the "index.html" file. That should start the game in a new tab in your default browser.
 
